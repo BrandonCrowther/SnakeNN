@@ -1,0 +1,24 @@
+{
+  "name": "snakenn",
+  "version": "1.0.0",
+  "description": "Snake Neural network in Tensorflowjs",
+  "main": "game.js",
+  "scripts": {
+    "train": "node training.js",
+    "bundle": "browserify browserScript.js -o index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BrandonCrowther/SnakeNN.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BrandonCrowther/SnakeNN/issues"
+  },
+  "homepage": "https://github.com/BrandonCrowther/SnakeNN#readme",
+  "dependencies": {
+    "@tensorflow/tfjs-node": "^1.5.2",
+    "browserify": "^16.5.0"
+  }
+}
