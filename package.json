@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/BrandonCrowther/SnakeNN#readme",
   "dependencies": {
-    "@tensorflow/tfjs-node": "^1.5.2",
+    "@tensorflow/tfjs-node-gpu": "^1.5.2",
     "browserify": "^16.5.0"
   }
 }

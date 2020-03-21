@@ -1,0 +1,426 @@
+
+{
+  "header": {
+    "reportVersion": 1,
+    "event": "Allocation failed - JavaScript heap out of memory",
+    "trigger": "FatalError",
+    "filename": "report.20200316.235410.9574.0.001.json",
+    "dumpEventTime": "2020-03-16T23:54:10Z",
+    "dumpEventTimeStamp": "1584413650914",
+    "processId": 9574,
+    "cwd": "/home/brandon/dev/SnakeNN",
+    "commandLine": [
+      "node",
+      "trainingScript.js"
+    ],
+    "nodejsVersion": "v12.16.1",
+    "glibcVersionRuntime": "2.27",
+    "glibcVersionCompiler": "2.17",
+    "wordSize": 64,
+    "arch": "x64",
+    "platform": "linux",
+    "componentVersions": {
+      "node": "12.16.1",
+      "v8": "7.8.279.23-node.31",
+      "uv": "1.34.0",
+      "zlib": "1.2.11",
+      "brotli": "1.0.7",
+      "ares": "1.15.0",
+      "modules": "72",
+      "nghttp2": "1.40.0",
+      "napi": "5",
+      "llhttp": "2.0.4",
+      "http_parser": "2.9.3",
+      "openssl": "1.1.1d",
+      "cldr": "35.1",
+      "icu": "64.2",
+      "tz": "2019c",
+      "unicode": "12.1"
+    },
+    "release": {
+      "name": "node",
+      "lts": "Erbium",
+      "headersUrl": "https://nodejs.org/download/release/v12.16.1/node-v12.16.1-headers.tar.gz",
+      "sourceUrl": "https://nodejs.org/download/release/v12.16.1/node-v12.16.1.tar.gz"
+    },
+    "osName": "Linux",
+    "osRelease": "5.3.0-40-generic",
+    "osVersion": "#32~18.04.1-Ubuntu SMP Mon Feb 3 14:05:59 UTC 2020",
+    "osMachine": "x86_64",
+    "cpus": [
+      {
+        "model": "Intel(R) Core(TM) i7-9700K CPU @ 3.60GHz",
+        "speed": 4603,
+        "user": 8974800,
+        "nice": 1400,
+        "sys": 866100,
+        "idle": 46216900,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i7-9700K CPU @ 3.60GHz",
+        "speed": 4624,
+        "user": 8021000,
+        "nice": 11200,
+        "sys": 1092600,
+        "idle": 46826100,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i7-9700K CPU @ 3.60GHz",
+        "speed": 4647,
+        "user": 7981600,
+        "nice": 2200,
+        "sys": 886700,
+        "idle": 47237400,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i7-9700K CPU @ 3.60GHz",
+        "speed": 4617,
+        "user": 8585000,
+        "nice": 13000,
+        "sys": 860800,
+        "idle": 46637300,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i7-9700K CPU @ 3.60GHz",
+        "speed": 4617,
+        "user": 8457500,
+        "nice": 1900,
+        "sys": 846000,
+        "idle": 46788400,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i7-9700K CPU @ 3.60GHz",
+        "speed": 4609,
+        "user": 4181900,
+        "nice": 2300,
+        "sys": 3715200,
+        "idle": 47692900,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i7-9700K CPU @ 3.60GHz",
+        "speed": 4625,
+        "user": 7729500,
+        "nice": 1600,
+        "sys": 852600,
+        "idle": 47517000,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i7-9700K CPU @ 3.60GHz",
+        "speed": 4625,
+        "user": 7086000,
+        "nice": 3100,
+        "sys": 869500,
+        "idle": 48114400,
+        "irq": 0
+      }
+    ],
+    "networkInterfaces": [
+      {
+        "name": "lo",
+        "internal": true,
+        "mac": "00:00:00:00:00:00",
+        "address": "127.0.0.1",
+        "netmask": "255.0.0.0",
+        "family": "IPv4"
+      },
+      {
+        "name": "eno1",
+        "internal": false,
+        "mac": "00:d8:61:be:e8:6e",
+        "address": "192.168.2.18",
+        "netmask": "255.255.255.0",
+        "family": "IPv4"
+      },
+      {
+        "name": "lo",
+        "internal": true,
+        "mac": "00:00:00:00:00:00",
+        "address": "::1",
+        "netmask": "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
+        "family": "IPv6",
+        "scopeid": 0
+      },
+      {
+        "name": "eno1",
+        "internal": false,
+        "mac": "00:d8:61:be:e8:6e",
+        "address": "fe80::40f7:839e:e753:425c",
+        "netmask": "ffff:ffff:ffff:ffff::",
+        "family": "IPv6",
+        "scopeid": 2
+      }
+    ],
+    "host": "brandon-MS-7B98"
+  },
+  "javascriptStack": {
+    "message": "No stack.",
+    "stack": [
+      "Unavailable."
+    ]
+  },
+  "nativeStack": [
+    {
+      "pc": "0x0000000000b278f5",
+      "symbol": "report::TriggerNodeReport(v8::Isolate*, node::Environment*, char const*, char const*, std::string const&, v8::Local<v8::String>) [node]"
+    },
+    {
+      "pc": "0x00000000009f13ec",
+      "symbol": "node::OnFatalError(char const*, char const*) [node]"
+    },
+    {
+      "pc": "0x0000000000b5da9e",
+      "symbol": "v8::Utils::ReportOOMFailure(v8::internal::Isolate*, char const*, bool) [node]"
+    },
+    {
+      "pc": "0x0000000000b5de19",
+      "symbol": "v8::internal::V8::FatalProcessOutOfMemory(v8::internal::Isolate*, char const*, bool) [node]"
+    },
+    {
+      "pc": "0x0000000000d0a765",
+      "symbol": " [node]"
+    },
+    {
+      "pc": "0x0000000000d0adf6",
+      "symbol": "v8::internal::Heap::RecomputeLimits(v8::internal::GarbageCollector) [node]"
+    },
+    {
+      "pc": "0x0000000000d1760a",
+      "symbol": "v8::internal::Heap::PerformGarbageCollection(v8::internal::GarbageCollector, v8::GCCallbackFlags) [node]"
+    },
+    {
+      "pc": "0x0000000000d18515",
+      "symbol": "v8::internal::Heap::CollectGarbage(v8::internal::AllocationSpace, v8::internal::GarbageCollectionReason, v8::GCCallbackFlags) [node]"
+    },
+    {
+      "pc": "0x0000000000d1afcc",
+      "symbol": "v8::internal::Heap::AllocateRawWithRetryOrFail(int, v8::internal::AllocationType, v8::internal::AllocationOrigin, v8::internal::AllocationAlignment) [node]"
+    },
+    {
+      "pc": "0x0000000000ce19bb",
+      "symbol": "v8::internal::Factory::NewFillerObject(int, bool, v8::internal::AllocationType, v8::internal::AllocationOrigin) [node]"
+    },
+    {
+      "pc": "0x00000000010246ce",
+      "symbol": "v8::internal::Runtime_AllocateInYoungGeneration(int, unsigned long*, v8::internal::Isolate*) [node]"
+    },
+    {
+      "pc": "0x00000000013a71b9",
+      "symbol": " [node]"
+    }
+  ],
+  "javascriptHeap": {
+    "totalMemory": 2167554048,
+    "totalCommittedMemory": 2166743216,
+    "usedMemory": 2010953656,
+    "availableMemory": 63545512,
+    "memoryLimit": 2197815296,
+    "heapSpaces": {
+      "read_only_space": {
+        "memorySize": 262144,
+        "committedMemory": 33088,
+        "capacity": 32808,
+        "used": 32808,
+        "available": 0
+      },
+      "new_space": {
+        "memorySize": 33554432,
+        "committedMemory": 33030696,
+        "capacity": 16759296,
+        "used": 329072,
+        "available": 16430224
+      },
+      "old_space": {
+        "memorySize": 2032812032,
+        "committedMemory": 2032786600,
+        "capacity": 1947934104,
+        "used": 1947839360,
+        "available": 94744
+      },
+      "code_space": {
+        "memorySize": 1478656,
+        "committedMemory": 1450112,
+        "capacity": 1022272,
+        "used": 1022272,
+        "available": 0
+      },
+      "map_space": {
+        "memorySize": 43782144,
+        "committedMemory": 43778080,
+        "capacity": 6153360,
+        "used": 6153360,
+        "available": 0
+      },
+      "large_object_space": {
+        "memorySize": 55615488,
+        "committedMemory": 55615488,
+        "capacity": 55574000,
+        "used": 55574000,
+        "available": 0
+      },
+      "code_large_object_space": {
+        "memorySize": 49152,
+        "committedMemory": 49152,
+        "capacity": 2784,
+        "used": 2784,
+        "available": 0
+      },
+      "new_large_object_space": {
+        "memorySize": 0,
+        "committedMemory": 0,
+        "capacity": 16759296,
+        "used": 0,
+        "available": 16759296
+      }
+    }
+  },
+  "resourceUsage": {
+    "userCpuSeconds": 2257.37,
+    "kernelCpuSeconds": 9.84027,
+    "cpuConsumptionPercent": 117.411,
+    "maxRss": 2643386368,
+    "pageFaults": {
+      "IORequired": 6,
+      "IONotRequired": 3548112
+    },
+    "fsActivity": {
+      "reads": 1440,
+      "writes": 64
+    }
+  },
+  "uvthreadResourceUsage": {
+    "userCpuSeconds": 1907.61,
+    "kernelCpuSeconds": 5.27145,
+    "cpuConsumptionPercent": 99.0618,
+    "fsActivity": {
+      "reads": 1440,
+      "writes": 0
+    }
+  },
+  "libuv": [
+  ],
+  "environmentVariables": {
+    "CLUTTER_IM_MODULE": "xim",
+    "NVM_DIR": "/home/brandon/.nvm",
+    "LS_COLORS": "rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:",
+    "LESSCLOSE": "/usr/bin/lesspipe %s %s",
+    "XDG_MENU_PREFIX": "gnome-",
+    "LANG": "en_CA.UTF-8",
+    "DISPLAY": ":1",
+    "GNOME_SHELL_SESSION_MODE": "ubuntu",
+    "COLORTERM": "truecolor",
+    "NVM_CD_FLAGS": "",
+    "USERNAME": "brandon",
+    "CHROME_DESKTOP": "code-url-handler.desktop",
+    "XDG_VTNR": "2",
+    "GIO_LAUNCHED_DESKTOP_FILE_PID": "2186",
+    "SSH_AUTH_SOCK": "/run/user/1000/keyring/ssh",
+    "XDG_SESSION_ID": "2",
+    "USER": "brandon",
+    "DESKTOP_SESSION": "ubuntu",
+    "QT4_IM_MODULE": "xim",
+    "TEXTDOMAINDIR": "/usr/share/locale/",
+    "PWD": "/home/brandon/dev/SnakeNN",
+    "HOME": "/home/brandon",
+    "TEXTDOMAIN": "im-config",
+    "SSH_AGENT_PID": "1820",
+    "TERM_PROGRAM": "vscode",
+    "TERM_PROGRAM_VERSION": "1.43.0",
+    "QT_ACCESSIBILITY": "1",
+    "XDG_SESSION_TYPE": "x11",
+    "XDG_DATA_DIRS": "/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop",
+    "XDG_SESSION_DESKTOP": "ubuntu",
+    "GJS_DEBUG_OUTPUT": "stderr",
+    "GTK_MODULES": "gail:atk-bridge",
+    "WINDOWPATH": "2",
+    "TERM": "xterm-256color",
+    "SHELL": "/bin/bash",
+    "QT_IM_MODULE": "xim",
+    "XMODIFIERS": "@im=ibus",
+    "IM_CONFIG_PHASE": "2",
+    "NVM_BIN": "/home/brandon/.nvm/versions/node/v12.16.1/bin",
+    "XDG_CURRENT_DESKTOP": "Unity",
+    "GPG_AGENT_INFO": "/run/user/1000/gnupg/S.gpg-agent:0:1",
+    "GIO_LAUNCHED_DESKTOP_FILE": "/usr/share/applications/code.desktop",
+    "SHLVL": "2",
+    "XDG_SEAT": "seat0",
+    "LANGUAGE": "en_CA:en",
+    "GDMSESSION": "ubuntu",
+    "GNOME_DESKTOP_SESSION_ID": "this-is-deprecated",
+    "LOGNAME": "brandon",
+    "DBUS_SESSION_BUS_ADDRESS": "unix:path=/run/user/1000/bus",
+    "XDG_RUNTIME_DIR": "/run/user/1000",
+    "XAUTHORITY": "/run/user/1000/gdm/Xauthority",
+    "XDG_CONFIG_DIRS": "/etc/xdg/xdg-ubuntu:/etc/xdg",
+    "PATH": "/home/brandon/.nvm/versions/node/v12.16.1/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+    "GJS_DEBUG_TOPICS": "JS ERROR;JS LOG",
+    "SESSION_MANAGER": "local/brandon-MS-7B98:@/tmp/.ICE-unix/1725,unix/brandon-MS-7B98:/tmp/.ICE-unix/1725",
+    "LESSOPEN": "| /usr/bin/lesspipe %s",
+    "GTK_IM_MODULE": "ibus",
+    "_": "/home/brandon/.nvm/versions/node/v12.16.1/bin/node"
+  },
+  "userLimits": {
+    "core_file_size_blocks": {
+      "soft": 0,
+      "hard": "unlimited"
+    },
+    "data_seg_size_kbytes": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    },
+    "file_size_blocks": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    },
+    "max_locked_memory_bytes": {
+      "soft": 16777216,
+      "hard": 16777216
+    },
+    "max_memory_size_kbytes": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    },
+    "open_files": {
+      "soft": 1048576,
+      "hard": 1048576
+    },
+    "stack_size_bytes": {
+      "soft": 8388608,
+      "hard": "unlimited"
+    },
+    "cpu_time_seconds": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    },
+    "max_user_processes": {
+      "soft": 63599,
+      "hard": 63599
+    },
+    "virtual_memory_kbytes": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    }
+  },
+  "sharedObjects": [
+    "linux-vdso.so.1",
+    "/lib/x86_64-linux-gnu/libdl.so.2",
+    "/usr/lib/x86_64-linux-gnu/libstdc++.so.6",
+    "/lib/x86_64-linux-gnu/libm.so.6",
+    "/lib/x86_64-linux-gnu/libgcc_s.so.1",
+    "/lib/x86_64-linux-gnu/libpthread.so.0",
+    "/lib/x86_64-linux-gnu/libc.so.6",
+    "/lib64/ld-linux-x86-64.so.2",
+    "/home/brandon/dev/SnakeNN/node_modules/@tensorflow/tfjs-node-gpu/lib/napi-v5/tfjs_binding.node",
+    "/home/brandon/dev/SnakeNN/node_modules/@tensorflow/tfjs-node-gpu/lib/napi-v5/../../deps/lib/libtensorflow.so.1",
+    "/home/brandon/dev/SnakeNN/node_modules/@tensorflow/tfjs-node-gpu/lib/napi-v5/../../deps/lib/libtensorflow_framework.so.1",
+    "/lib/x86_64-linux-gnu/librt.so.1",
+    "/usr/lib/x86_64-linux-gnu/libcuda.so.1",
+    "/usr/lib/x86_64-linux-gnu/libcudnn.so.7"
+  ]
+}

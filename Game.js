@@ -11,7 +11,7 @@ class Game{
     constructor(input){
         this.input = input;
         this.board = [...Array(BOARD_SIZE)].map(e => Array(BOARD_SIZE).fill(EMPTY));
-        this.score = 1
+        this.score = 0
         this.ticks = 0
         this.head = new Head(
             Math.floor((BOARD_SIZE / 4) + (Math.random() * (BOARD_SIZE / 4))), 
@@ -24,7 +24,7 @@ class Game{
 
 
     tick = () => {
-        let move = this.input.getMove(this.head, this.cheese, this.score)
+        let move = this.input.getMove2(this.head, this.cheese, this.score, this.board)
         let oldNode = new Tail(this.head.x, this.head.y)
 
         if(this.head.next){
@@ -39,22 +39,27 @@ class Game{
         this.head.y += move[1]
 
         let gameOver = this.head.checkCollision()
+
         let cheeseFound = this.checkCheese()
 
         if(cheeseFound){
             this.cheese = this.createNewCheese()
-            this.score++
+            this.score += 1000
             this.ticks = 0
         }
         else
             this.head.deleteLast()
 
         this.ticks++
+        this.score += 10
 
         if(this.ticks == BOARD_SIZE * BOARD_SIZE){
             gameOver = true
         }
 
+        if(gameOver){
+            this.score -= 1000;
+        }
         if(!gameOver)
             this.redraw()
 
@@ -62,12 +67,12 @@ class Game{
     }
 
 
-    checkCheese = () => {
+    checkCheese(){
         return (this.head.x == this.cheese.x 
             && this.head.y == this.cheese.y)
     }
 
-    createNewCheese = () => {
+    createNewCheese(){
         let potX = Math.floor(Math.random() * BOARD_SIZE)
         let potY = Math.floor(Math.random() * BOARD_SIZE)
 
@@ -82,7 +87,7 @@ class Game{
     }
 
 
-    redraw = () => {
+    redraw(){
         this.board = [...Array(BOARD_SIZE)].map(e => Array(BOARD_SIZE).fill(EMPTY));
         let positions = this.head.getPositions()
 
@@ -96,9 +101,6 @@ class Game{
         this.states.push(this.board)
         
     }
-
-    getScore = () => this.score * this.ticks
-    
 }
 
 

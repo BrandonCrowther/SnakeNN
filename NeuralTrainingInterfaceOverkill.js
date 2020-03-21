@@ -1,6 +1,6 @@
 const [Snake, Tail, Head, Cheese] = require('./Objects')
 
-class NeuralTrainingInterface{
+class NeuralTrainingInterfaceOverkill{
     constructor(){
         this.newModel()
 
@@ -8,14 +8,15 @@ class NeuralTrainingInterface{
         this.scores = []
     }
 
-    newModel(){      
+    newModel(){
+        const inputShape = 8//(BOARD_SIZE * BOARD_SIZE) * 3
         tf.tidy(() => {
             this.model = tf.sequential({
                 layers: [
-                    // not necessary /shrug
-                    // tf.layers.dense({units: 16, activation: "sigmoid", inputShape: [8]}),
-                    // tf.layers.dense({units: 32, activation: "sigmoid"}),
-                    tf.layers.dense({units: 4, activation: "softmax",  inputShape: [8]})
+                    // tf.layers.dense({units: 8, inputShape: [inputShape]}),
+                    // tf.layers.dense({
+                    //     units: 16, activation: "sigmoid"}),
+                    tf.layers.dense({units: 4, activation: "softmax", inputShape: [inputShape]})
                 ]
             })
             this.model.compile({
@@ -25,7 +26,37 @@ class NeuralTrainingInterface{
         })
     }
 
-    getMove(head, cheese, score) {
+    getMove(head, cheese, score, board) {
+
+        const cheeseBoard = [...Array(BOARD_SIZE)].map(e => Array(BOARD_SIZE).fill(EMPTY));
+        const scaryBoard = [...Array(BOARD_SIZE)].map(e => Array(BOARD_SIZE).fill(EMPTY));
+        const headBoard = [...Array(BOARD_SIZE)].map(e => Array(BOARD_SIZE).fill(EMPTY));
+
+
+        for(var i = 0; i < BOARD_SIZE; i++){
+            for(var j = 0; j < BOARD_SIZE; j++){
+                if(board[i][j] == CHEESE)
+                    cheeseBoard[i][j] = 1
+                if(board[i][j] == TAIL)
+                    scaryBoard[i][j] = 1
+                if(board[i][j] == HEAD)
+                    headBoard[i][j] = 1
+            }
+        }
+
+        // flatten the various board representations into a linearsequence of numbers
+        const params = cheeseBoard.flat().concat(scaryBoard.flat().concat(headBoard.flat()))
+
+
+        return tf.tidy(_ => {
+            const tensor =  tf.tensor2d(params, [1, params.length])
+            const predict = this.model.predict(tensor).flatten().arraySync()
+    
+            return this.formatMove(predict)
+        })
+    }
+
+    getMove2(head, cheese, score) {
         const distX = (cheese.x - head.x) / BOARD_SIZE
         const distY = (cheese.y - head.y) / BOARD_SIZE
 
@@ -80,6 +111,7 @@ class NeuralTrainingInterface{
     }
 
     formatMove(move) {
+        // console.log(move)
         const processed = move.indexOf(Math.max(...move));
         if(processed == 0) //N
             return [0, -1]
@@ -95,23 +127,14 @@ class NeuralTrainingInterface{
         await this.model.save('file://./models/' + score)
     }
 
-    async fitReplay(){
-        const [inputsAsTensor, scoreAsTensor] = tf.tidy(_ => [
-            tf.tensor2d(this.inputs, [this.inputs.length, this.inputs[0].length]),
-            tf.tensor2d(this.scores, [this.scores.length, this.scores[0].length])
-        ])
-        
-        await this.model.fit(inputsAsTensor, scoreAsTensor, {epochs: 1})
 
-        // reset replay
-        this.scores = []
-        this.inputs = []
+    async applyWeights(weights){
+        var temp = await this.model.layers[0].getWeights()
+        temp[0] = tf.variable(weights)
 
-        // probably redundant disposal
-        scoreAsTensor.dispose()
-        inputsAsTensor.dispose()
+        this.model.layers[0].setWeights(temp)
     }
 
 }
 
-module.exports = NeuralTrainingInterface
+module.exports = NeuralTrainingInterfaceOverkill
