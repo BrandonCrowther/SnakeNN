@@ -15,7 +15,7 @@ class NeuralTrainingInterface{
                     // not necessary /shrug
                     // tf.layers.dense({units: 16, activation: "sigmoid", inputShape: [8]}),
                     // tf.layers.dense({units: 32, activation: "sigmoid"}),
-                    tf.layers.dense({units: 4, activation: "softmax",  inputShape: [8]})
+                    tf.layers.dense({units: 4, activation: "softmax",  inputShape: [11]})
                 ]
             })
             this.model.compile({
@@ -26,6 +26,10 @@ class NeuralTrainingInterface{
     }
 
     getMove(head, cheese, score) {
+        const posX = head.x / BOARD_SIZE
+        const posY = head.y / BOARD_SIZE
+        const snakeLen = head.getLength() / (BOARD_SIZE * BOARD_SIZE)
+
         const distX = (cheese.x - head.x) / BOARD_SIZE
         const distY = (cheese.y - head.y) / BOARD_SIZE
 
@@ -36,12 +40,15 @@ class NeuralTrainingInterface{
         const distWest =  distX <= 0 ? Math.abs(distX) : 0
 
         // hack to check collisions because I didnt think far enough ahead
-        const canMoveUp =     new Head(head.x, head.y - 1, head.next).checkCollision() ? -1 : 1
-        const canMoveRight =  new Head(head.x + 1, head.y, head.next).checkCollision() ? -1 : 1
-        const canMoveDown =   new Head(head.x, head.y + 1, head.next).checkCollision() ? -1 : 1
-        const canMoveLeft =   new Head(head.x - 1, head.y, head.next).checkCollision() ? -1 : 1
+        const canMoveUp =     new Head(head.x, head.y - 1, head.next).checkCollision() ? 0 : 1
+        const canMoveRight =  new Head(head.x + 1, head.y, head.next).checkCollision() ? 0 : 1
+        const canMoveDown =   new Head(head.x, head.y + 1, head.next).checkCollision() ? 0 : 1
+        const canMoveLeft =   new Head(head.x - 1, head.y, head.next).checkCollision() ? 0 : 1
 
         const params = [
+            posX,
+            posY,
+            snakeLen,
             distNorth,
             distEast,
             distSouth,

@@ -1,6 +1,6 @@
 const [Snake, Tail, Head, Cheese] = require('./Objects')
 
-global.BOARD_SIZE = 10;
+global.BOARD_SIZE = 5;
 global.EMPTY = 0;
 global.HEAD = 1;
 global.TAIL = 2;
@@ -14,17 +14,25 @@ class Game{
         this.score = 0
         this.ticks = 0
         this.head = new Head(
+            // Math.floor(Math.random() * BOARD_SIZE),
+            // Math.floor(Math.random() * BOARD_SIZE)
             Math.floor((BOARD_SIZE / 4) + (Math.random() * (BOARD_SIZE / 4))), 
             Math.floor((BOARD_SIZE / 4) + (Math.random() * (BOARD_SIZE / 4)))
         )
+        this.head.next = new Tail(this.head.x -1, this.head.y)
         this.cheese = this.createNewCheese()
 
         this.states = []
+
+        this.dist = this.distance()
+        
+
+        this.redraw()
     }
 
 
-    tick = () => {
-        let move = this.input.getMove2(this.head, this.cheese, this.score, this.board)
+    tick() {
+        let move = this.input.getMove(this.head, this.cheese, this.score, this.board)
         let oldNode = new Tail(this.head.x, this.head.y)
 
         if(this.head.next){
@@ -44,24 +52,35 @@ class Game{
 
         if(cheeseFound){
             this.cheese = this.createNewCheese()
-            this.score += 1000
+            this.score += 15
             this.ticks = 0
         }
         else
             this.head.deleteLast()
 
         this.ticks++
-        this.score += 10
+        // this.score += 1
+
 
         if(this.ticks == BOARD_SIZE * BOARD_SIZE){
             gameOver = true
         }
 
         if(gameOver){
-            this.score -= 1000;
+            // this.score -= 10;
         }
-        if(!gameOver)
+        if(!gameOver){
             this.redraw()
+
+            const newDist = this.distance()
+            // if(this.dist > newDist){
+            //     this.score += 1
+            // }
+            // else
+            //     this.score -= 1
+
+            this.dist = newDist
+        }
 
         return gameOver;
     }
@@ -100,6 +119,13 @@ class Game{
 
         this.states.push(this.board)
         
+    }
+
+    distance(){
+        return Math.sqrt(Math.abs(
+            Math.pow((this.head.x - this.cheese.x), 2) +
+            Math.pow((this.head.y - this.cheese.y), 2)
+        ))
     }
 }
 

@@ -7,7 +7,7 @@ class Snake{
     }
 
 
-    deleteLast = () => {
+    deleteLast () {
         if(this.next){
             if(this.next.next){
                 return this.next.deleteLast()
@@ -24,7 +24,7 @@ class Snake{
 class Tail extends Snake{}
 
 class Head extends Snake{
-    checkCollision = () => {
+    checkCollision () {
         let node = this.next;
 
         while(node != null){
@@ -41,7 +41,7 @@ class Head extends Snake{
         return false;
     }
     
-    getPositions = () => {
+    getPositions () {
         let arr = [[this.x, this.y]]
         let node = this.next;
         while(node != null){
@@ -49,6 +49,10 @@ class Head extends Snake{
             node = node.next;
         }
         return arr;
+    }
+
+    getLength(){
+        return this.getPositions().length
     }
 }
 

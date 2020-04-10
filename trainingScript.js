@@ -1,15 +1,26 @@
 const Game = require('./Game')
 const NeuralTrainingInterface = require('./NeuralTrainingInterface')
-const NeuralTrainingInterfaceOverkill = require('./NeuralTrainingInterfaceOverkill')
-global.tf = require('@tensorflow/tfjs-node-gpu');
+const NeuralPreloadedInterface = require('./NeuralPreloadedInterface')
+const GeneticInterface = require('./GeneticInterface')
+global.tf = require('@tensorflow/tfjs-node-gpu'); 
+
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+
+let oldMem = process.memoryUsage();
+
 function mem(){
     console.table(tf.memory())
-    console.table(process.memoryUsage())
+    const m = process.memoryUsage()
+    for (var k in m){
+        oldMem[k] = m[k] - oldMem[k]
+    }
+    console.table(oldMem)
+    oldMem = m
+    console.table(oldMem)
     // var used = process.memoryUsage();
     // for (var key in used) {
         
@@ -20,17 +31,20 @@ function mem(){
 
 
 async function run(){
-    var model = await tf.loadLayersModel('file://./models/45/model.json');
-    var input = new PretrainedNetworkInterface(model, tf);
+    var model = await tf.loadLayersModel('file://./bbb/23/model.json');
+    var input = new NeuralPreloadedInterface(model, tf);
     
     while(true){
         var game = new Game(input);
         var done = false;
+
         while(!done){
             done = game.tick();
-            sleep(400)
-            console.table(game.board)
+            // sleep(400)
+            // console.table(game.board)
         }
+        console.log(game.ticks)
+        mem()
     }
 }
 
@@ -72,7 +86,7 @@ async function trainRandom(){
         mem()
         run++;
         console.log(`Run ${run} - topScore ${topScore}`)
-        var interface = new NeuralTrainingInterfaceOverkill()
+        var interface = new GeneticInterface()
         mem()
         var game = new Game(interface)
         // console.table(tf.memory())
@@ -98,33 +112,67 @@ async function trainRandom(){
     
 }
 
-const POPULATION_SIZE = 10000
+const POPULATION_SIZE = 1000
+const MUTATION_RATE = 1
 const KEEP_SIZE = 6
 var weightsFromBest = []
 var round = 1;
 var test = []
 var topTotalScore = 0
+var shape;
 
 async function trainGenetic(){
+
+    const temp = await tf.loadLayersModel('file://./aaa/9/model.json');
+    weightsFromBest = [await temp.layers[0].getWeights()[0].arraySync()]
+    shape = temp.layers[0].getWeights()[0].shape
 
     while(true){
         var games = [];
         for(var i = 0; i < POPULATION_SIZE; i++){
-            const a = new NeuralTrainingInterfaceOverkill(tf)
+
+            const a = new GeneticInterface()
+
+            // console.log('BEFORE')
+            // a.model.layers[0].getWeights()[0].print()
+
+
+
             if(weightsFromBest.length > 0){
-                if((Math.random() * 1000) > 5){
+                let newWeight;
+                if((Math.random() * 100) > 10){
                     const index1 = Math.floor(Math.random() * weightsFromBest.length)
                     const index2 = Math.floor(Math.random() * weightsFromBest.length)
                     const cross1 = weightsFromBest[index1]
                     const cross2 = weightsFromBest[index2]
-                    const crossed = await crossover(cross1, cross2)
+                    const crossed = crossover(cross1, cross2)
     
-                    a.applyWeights(await mutateWeights(crossed))
+                    if(Math.random() * 100 > 5)
+                        newWeight = tf.tidy(_ => tf.tensor(mutateWeights(crossed)).reshape(shape))
+                    else
+                        newWeight = tf.tidy(_ => tf.tensor(crossed).reshape(shape))
+
                 }
+                else{
+                    newWeight = tf.tidy(_ => tf.randomUniform(shape, -1, 1))
+                }
+
+                tf.tidy(_ => {
+                    const newLayer = [
+                        newWeight,
+                        tf.zeros([4])
+                    ]
+
+                    a.model.layers[0].setWeights(newLayer)
+                    tf.dispose(newLayer)
+                    tf.dispose(newWeight)
+                })
+
+                // console.log('AFTER')
+                // a.model.layers[0].getWeights()[0].print()
             }
-            else{
-                a.applyWeights(tf.randomUniform([8,4], -1, 1))
-            }
+
+
             const b = new Game(a);
             games.push(b)
         }
@@ -144,17 +192,25 @@ async function trainGenetic(){
         })
         
         var bestFromRun = games.slice(0, KEEP_SIZE)
-        if(bestFromRun[0].score == topTotalScore){
-            await bestFromRun[0].input.save(topTotalScore)
-        }
-        weightsFromBest = bestFromRun.map(g => g.input.model.layers[0].getWeights()[0])
-        // test = weightsFromBest.map(e => e.arraySync())
+        bestFromRun[0].states.forEach(e => console.table(e))
+
+        if(bestFromRun.length > 0){
+            if(bestFromRun[0].score == topTotalScore){
+                await bestFromRun[0].input.save(topTotalScore)
+            }
     
+            weightsFromBest = bestFromRun.map(g => {
+                var tmpWeights = g.input.model.layers[0].getWeights()[0]
+                shape = tmpWeights.shape
+                return tmpWeights.arraySync()
+            })
+        
+        }
         console.log(`Round ${round++} | topRound ${topRoundScore} | topTotal ${topTotalScore}`);
-        // games.forEach(e => e.input.model.dispose())
-        // tf.disposeVariables()
+
+
+        tf.disposeVariables()
         mem()
-        // console.log(test)
     }
     
  
@@ -163,44 +219,36 @@ async function trainGenetic(){
 
 
 
-const MUTATION_RATE = 1
-async function mutateWeights(weights){
-    return await tf.tidy(_ => {
-        const shape = weights.shape
-        var toArray = weights.arraySync()
-        const wArray = weights.arraySync()
-        
-        for(var i = 0; i < MUTATION_RATE; i++){
-            const randomY = Math.floor(Math.random() * toArray.length)
-            const randomX = Math.floor(Math.random() * toArray[0].length)
-            toArray[randomY][randomX] = Math.random() * 2 - 1
+function mutateWeights(weights){
+    var toArray = weights
+    
+    for(var i = 0; i < MUTATION_RATE; i++){
+        const randomY = Math.floor(Math.random() * toArray.length)
+        const randomX = Math.floor(Math.random() * toArray[0].length)
+        toArray[randomY][randomX] = Math.random() * 2 - 1
+    }
+    
+    //const tensorOut = tf.tensor(toArray).reshape(shape)
+    return toArray
+}
+
+function crossover(weight1, weight2){
+    const toArray1 = weight1
+    const toArray2 = weight2
+    var arrayOut = [...toArray1]
+
+    for(var y = 0; y < toArray1.length; y++)
+        for(var x = 0; x < toArray1[0].length; x++){
+            if(Math.random > 0.5)
+                arrayOut[y][x] = toArray1[y][x]
+            else
+                arrayOut[y][x] = toArray2[y][x]
         }
-        
-        const tensorOut = tf.tensor(toArray).reshape(shape)
-        return tensorOut
-    })
-}
-
-async function crossover(weight1, weight2){
-    return await tf.tidy(_ => {
-        const shape = weight1.shape
-        const toArray1 = weight1.arraySync()
-        const toArray2 = weight2.arraySync()
-        var arrayOut = [...toArray1]
-
-        for(var y = 0; y < toArray1.length; y++)
-            for(var x = 0; x < toArray1[0].length; x++){
-                if(Math.random > 0.5)
-                    arrayOut[y][x] = toArray1[y][x]
-                else
-                    arrayOut[y][x] = toArray2[y][x]
-            }
-        
-        const tensorOut = tf.tensor(arrayOut).reshape(shape)
-        return tensorOut
-    })
+    
+    //const tensorOut = tf.tensor(arrayOut)
+    return arrayOut
 }
 
 
 
-trainGenetic();
+train();
