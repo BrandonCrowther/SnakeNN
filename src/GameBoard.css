@@ -1,0 +1,33 @@
+
+.board{
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  
+  width: 60vmin;
+  height: 60vmin;
+}
+
+.block{
+    margin:1%;
+    width:8%;
+    height:8%;
+}
+
+.gray{
+    background-color: gray;
+}
+
+.red{
+    background-color: red;
+}
+
+.black{
+    background-color: black;
+}
+
+.yellow{
+    background-color: yellow;
+}

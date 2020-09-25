@@ -16,8 +16,8 @@ class GeneticInterface{
                 layers: [
                     //tf.layers.dense({units: 11, activation: "sigmoid", }),
                     // tf.layers.dense({units: 32, activation: "sigmoid" }),
-                    tf.layers.dense({units: 4, activation: 'softmax', inputShape: [8]})
-                ]
+                    tf.layers.dense({units: 4, activation: 'softmax', inputShape: [11]})
+                ]//tf.initializers.randomUniform
             })
             mod.compile({
                 loss: 'meanSquaredError', optimizer: 'sgd' 
@@ -77,9 +77,9 @@ class GeneticInterface{
         const canMoveLeft =   new Head(head.x - 1, head.y, head.next).checkCollision() ? 0 : 1
 
         const params = [
-            // posX,
-            // posY,
-            // snakeLen,
+            posX,
+            posY,
+            snakeLen,
             distNorth,
             distEast,
             distSouth,

@@ -1,10 +1,10 @@
-const [Snake, Tail, Head, Cheese] = require('./Objects')
+const {Snake, Tail, Head, Cheese} = require('./Objects')
+const {BOARD_SIZE} = require('./config')
 
-global.BOARD_SIZE = 5;
-global.EMPTY = 0;
-global.HEAD = 1;
-global.TAIL = 2;
-global.CHEESE = 3;
+const EMPTY = 0;
+const HEAD = 1;
+const TAIL = 2;
+const CHEESE = 3;
 
 
 class Game{
@@ -14,8 +14,6 @@ class Game{
         this.score = 0
         this.ticks = 0
         this.head = new Head(
-            // Math.floor(Math.random() * BOARD_SIZE),
-            // Math.floor(Math.random() * BOARD_SIZE)
             Math.floor((BOARD_SIZE / 4) + (Math.random() * (BOARD_SIZE / 4))), 
             Math.floor((BOARD_SIZE / 4) + (Math.random() * (BOARD_SIZE / 4)))
         )
@@ -52,7 +50,7 @@ class Game{
 
         if(cheeseFound){
             this.cheese = this.createNewCheese()
-            this.score += 15
+            this.score += 10
             this.ticks = 0
         }
         else
@@ -73,11 +71,11 @@ class Game{
             this.redraw()
 
             const newDist = this.distance()
-            // if(this.dist > newDist){
-            //     this.score += 1
-            // }
-            // else
-            //     this.score -= 1
+            if(this.dist > newDist){
+                this.score += 1
+            }
+            else
+                this.score -= 1
 
             this.dist = newDist
         }
@@ -130,4 +128,4 @@ class Game{
 }
 
 
-module.exports = Game
+export { Game }

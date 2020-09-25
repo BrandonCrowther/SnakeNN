@@ -1,0 +1,23 @@
+.App {
+  text-align: center;
+}
+
+.App{
+  background-color: #282c34;
+  height:100vh;
+  width:100vw;
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.game{
+  /* min-height: 70vh; */
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}

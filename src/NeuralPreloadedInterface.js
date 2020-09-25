@@ -1,11 +1,13 @@
 
 
-const [Snake, Tail, Head, Cheese] = require('./Objects')
+const {Snake, Tail, Head, Cheese} = require('./Objects')
+const {BOARD_SIZE} = require('./config')
+const tf = require('@tensorflow/tfjs')
 
-class NeuralPreloadedInterface{
-    constructor(model, tf){
+
+class NeuralPreloadedInterface {
+    constructor(model){
         this.model = model
-        this.tf = tf
     }
 
     getMove(head, cheese, score) {
@@ -29,9 +31,9 @@ class NeuralPreloadedInterface{
         const canMoveLeft =   new Head(head.x - 1, head.y, head.next).checkCollision() ? 0 : 1
 
         const params = [
-            posX,
-            posY,
-            snakeLen,
+            // posX,
+            // posY,
+            // snakeLen,
             distNorth,
             distEast,
             distSouth,
@@ -47,7 +49,6 @@ class NeuralPreloadedInterface{
             const tensor =  tf.tensor2d(params, [1, params.length])
             return this.model.predict(tensor).flatten().arraySync()
         })
-        
 
         const move = this.formatMove(predict)
         return move
@@ -69,4 +70,4 @@ class NeuralPreloadedInterface{
 }
 
 
-module.exports = NeuralPreloadedInterface
+export {NeuralPreloadedInterface}

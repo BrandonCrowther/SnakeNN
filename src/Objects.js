@@ -1,4 +1,7 @@
 
+
+const {BOARD_SIZE} = require('./config')
+
 class Snake{
     constructor(x, y, next = undefined){
         this.x = x;
@@ -64,12 +67,9 @@ class Cheese{
 }
 
 
-// module.exports = {
-//     Snake: Snake,
-//     Tail: Tail,
-//     Head: Head
-// }
-
-module.exports = [
-    Snake, Tail, Head, Cheese
-]
+export {
+    Snake,
+    Tail,
+    Head,
+    Cheese,
+}

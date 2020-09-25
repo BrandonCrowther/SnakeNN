@@ -1,4 +1,6 @@
-const [Snake, Tail, Head, Cheese] = require('./Objects')
+const tf = require('@tensorflow/tfjs')
+const {Snake, Tail, Head, Cheese} = require('./Objects')
+const {BOARD_SIZE} = require('./config')
 
 class NeuralTrainingInterface{
     constructor(){
@@ -12,10 +14,7 @@ class NeuralTrainingInterface{
         tf.tidy(() => {
             this.model = tf.sequential({
                 layers: [
-                    // not necessary /shrug
-                    // tf.layers.dense({units: 16, activation: "sigmoid", inputShape: [8]}),
-                    // tf.layers.dense({units: 32, activation: "sigmoid"}),
-                    tf.layers.dense({units: 4, activation: "softmax",  inputShape: [11]})
+                    tf.layers.dense({units: 4, activation: "softmax", inputShape: [8]})
                 ]
             })
             this.model.compile({
@@ -25,7 +24,10 @@ class NeuralTrainingInterface{
         })
     }
 
-    getMove(head, cheese, score) {
+    
+    getMove(head, cheese, score, board) {
+
+
         const posX = head.x / BOARD_SIZE
         const posY = head.y / BOARD_SIZE
         const snakeLen = head.getLength() / (BOARD_SIZE * BOARD_SIZE)
@@ -39,16 +41,16 @@ class NeuralTrainingInterface{
         const distEast =  distX >= 0 ? Math.abs(distX) : 0
         const distWest =  distX <= 0 ? Math.abs(distX) : 0
 
-        // hack to check collisions because I didnt think far enough ahead
+        // hack to check collisions
         const canMoveUp =     new Head(head.x, head.y - 1, head.next).checkCollision() ? 0 : 1
         const canMoveRight =  new Head(head.x + 1, head.y, head.next).checkCollision() ? 0 : 1
         const canMoveDown =   new Head(head.x, head.y + 1, head.next).checkCollision() ? 0 : 1
         const canMoveLeft =   new Head(head.x - 1, head.y, head.next).checkCollision() ? 0 : 1
 
         const params = [
-            posX,
-            posY,
-            snakeLen,
+            // posX,
+            // posY,
+            // snakeLen,
             distNorth,
             distEast,
             distSouth,
@@ -99,7 +101,7 @@ class NeuralTrainingInterface{
     }
 
     async save(score){
-        await this.model.save('file://./models/' + score)
+        await this.model.save('downloads://" + ' + score)
     }
 
     async fitReplay(){
@@ -108,17 +110,16 @@ class NeuralTrainingInterface{
             tf.tensor2d(this.scores, [this.scores.length, this.scores[0].length])
         ])
         
-        await this.model.fit(inputsAsTensor, scoreAsTensor, {epochs: 1})
+        await this.model.fit(inputsAsTensor, scoreAsTensor, {epochs: 100})
 
         // reset replay
         this.scores = []
         this.inputs = []
 
-        // probably redundant disposal
         scoreAsTensor.dispose()
         inputsAsTensor.dispose()
     }
 
 }
 
-module.exports = NeuralTrainingInterface
+export {NeuralTrainingInterface}
