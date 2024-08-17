@@ -2,19 +2,24 @@ class KeyboardInterfaceJs {
   constructor() {
     this.lastPress = [0, 1];
     document.addEventListener("keyup", (e) => {
+      console.log(e.code);
       switch (e.code) {
         case "ArrowUp":
         case "w":
-          lastPress = [0, -1];
+          this.lastPress = [0, -1];
+          break;
         case "ArrowRight":
         case "d":
-          lastPress = [1, 0];
+          this.lastPress = [1, 0];
+          break;
         case "ArrowDown":
         case "s":
-          lastPress = [0, 1];
+          this.lastPress = [0, 1];
+          break;
         case "ArrowLeft":
         case "a":
-          lastPress = [-1, 0];
+          this.lastPress = [-1, 0];
+          break;
       }
     });
   }

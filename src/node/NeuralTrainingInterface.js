@@ -1,13 +1,11 @@
 const { BOARD_SIZE, IS_NODE } = require("../shared/config");
 // Lol, lmao
-const tf = IS_NODE
-  ? require("@tensorflow/tfjs-node")
-  : require("@tensorflow/tfjs");
 const { Node } = require("../shared/Objects");
 
 class NeuralTrainingInterface {
-  constructor(game) {
+  constructor(game, tfjs) {
     this.newModel();
+    this.tf = tfjs;
     this.game = game;
     this.currentIteration = 1;
     this.snakeLength = 1;
@@ -16,15 +14,19 @@ class NeuralTrainingInterface {
   }
 
   newModel() {
-    tf.tidy(() => {
-      this.model = tf.sequential({
+    this.tf.tidy(() => {
+      this.model = this.tf.sequential({
         layers: [
-          tf.layers.dense({ units: 4, activation: "softmax", inputShape: [8] }),
+          this.tf.layers.dense({
+            units: 4,
+            activation: "softmax",
+            inputShape: [8],
+          }),
         ],
       });
       this.model.compile({
         optimizer: "adam",
-        loss: tf.metrics.categoricalCrossentropy,
+        loss: this.tf.metrics.categoricalCrossentropy,
       });
     });
     this.snakeLength = 1;
@@ -73,8 +75,8 @@ class NeuralTrainingInterface {
       canMoveLeft,
     ];
 
-    const predict = tf.tidy((_) => {
-      const tensor = tf.tensor2d(params, [1, params.length]);
+    const predict = this.tf.tidy((_) => {
+      const tensor = this.tf.tensor2d(params, [1, params.length]);
       return this.model.predict(tensor).flatten().arraySync();
     });
 
@@ -115,16 +117,7 @@ class NeuralTrainingInterface {
       // In the browser
       await this.model.save("downloads://" + this.currentIteration);
     } else if (typeof process !== "undefined") {
-      // In Node.js
-      const fs = require("fs");
-      const path = require("path");
-
-      const dir = path.join(__dirname, "saved_models");
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir);
-      }
-
-      const savePath = "file://" + path.join(dir, this.currentIteration + "");
+      const savePath = "file://" + this.currentIteration;
       await this.model.save(savePath);
     } else {
       throw new Error("Unknown environment. Cannot save the model.");
@@ -132,9 +125,15 @@ class NeuralTrainingInterface {
   }
 
   async fitReplay() {
-    const [inputsAsTensor, scoreAsTensor] = tf.tidy((_) => [
-      tf.tensor2d(this.inputs, [this.inputs.length, this.inputs[0].length]),
-      tf.tensor2d(this.scores, [this.scores.length, this.scores[0].length]),
+    const [inputsAsTensor, scoreAsTensor] = this.tf.tidy((_) => [
+      this.tf.tensor2d(this.inputs, [
+        this.inputs.length,
+        this.inputs[0].length,
+      ]),
+      this.tf.tensor2d(this.scores, [
+        this.scores.length,
+        this.scores[0].length,
+      ]),
     ]);
 
     await this.model.fit(inputsAsTensor, scoreAsTensor, { epochs: 100 });

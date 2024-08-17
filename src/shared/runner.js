@@ -12,7 +12,7 @@ async function runner(input, publishFunction) {
     let currentLength = 1;
 
     publishFunction(game.getState());
-    await sleep(10);
+    await sleep(100);
     while (game.tick(input.getMove())) {
       expireGameIn--;
       publishFunction(game.getState());
@@ -25,7 +25,7 @@ async function runner(input, publishFunction) {
         break;
       }
 
-      await sleep(10);
+      await sleep(100);
     }
 
     if (input.fitReplay) {

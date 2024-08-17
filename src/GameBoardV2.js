@@ -4,6 +4,7 @@ import { Spinner } from "react-bootstrap";
 import * as tf from "@tensorflow/tfjs";
 import { NeuralTrainingInterface } from "./node/NeuralTrainingInterface";
 import { runner } from "./shared/runner";
+import { KeyboardInterfaceJs } from "./shared/KeyboardInterfaceJS";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -29,8 +30,9 @@ export default function GameBoardV2(props) {
     (async () => {
       await tf.ready();
       const tfModel = await tf.loadLayersModel("model/model.json");
-      const inter = new NeuralTrainingInterface(tfModel);
+      const inter = new KeyboardInterfaceJs();
       // setModelInterface(new NeuralTrainingInterface(tfModel));
+
       runner(inter, setGameBoard);
       setIsLoaded(true);
     })();
@@ -51,7 +53,7 @@ export default function GameBoardV2(props) {
   return (
     <div>
       <div>
-        <button onClick={this.toggleMode}>Toggle Mode</button>{" "}
+        {/* <button onClick={this.toggleMode}>Toggle Mode</button>{" "} */}
         {/* {trainingMode ? "Training Mode" : "Pre-trained Mode"} */}
       </div>
       <div>{/* Run: {run} */}</div>
@@ -61,8 +63,10 @@ export default function GameBoardV2(props) {
         <button onClick={() => setGameSpeed(gameSpeed + 5)}>+</button>
       </div>
       <div className="board">
-        {gameBoard.getState().map((e) => {
-          return e.map((f) => <div className={"block " + colorMap[f]}></div>);
+        {gameBoard.map((e) => {
+          return e.map((f) => {
+            return <div className={"block " + colorMap[f]}></div>;
+          });
         })}
       </div>
     </div>
