@@ -1,7 +1,7 @@
 class KeyboardInterfaceJs {
   constructor() {
     this.lastPress = [0, 1];
-    document?.addEventListener("keyup", (e) => {
+    document.addEventListener("keyup", (e) => {
       switch (e.code) {
         case "ArrowUp":
         case "w":

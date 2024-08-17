@@ -29,6 +29,9 @@ class KeyboardInterfaceNode {
           break;
         case "\u0003": // Ctrl+C
           process.exit();
+        // eslint-disable-next-line no-fallthrough
+        default:
+          throw new Error("Invalid input");
       }
     });
   }

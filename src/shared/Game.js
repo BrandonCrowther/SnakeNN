@@ -7,8 +7,7 @@ const TAIL = "S";
 const CHEESE = "C";
 
 class Game {
-  constructor(input) {
-    this.input = input;
+  constructor() {
     this.snake = new Snake(
       Math.floor(BOARD_SIZE / 4 + Math.random() * (BOARD_SIZE / 4)),
       Math.floor(BOARD_SIZE / 4 + Math.random() * (BOARD_SIZE / 4))
@@ -32,15 +31,14 @@ class Game {
     return boardState;
   }
 
-  tick() {
-    const nextMove = this.input.getMove();
+  tick(nextMove) {
     const newHead = new Node(
       this.snake.tail[0].x + nextMove[0],
       this.snake.tail[0].y + nextMove[1]
     );
 
     this.snake.extend(newHead.x, newHead.y);
-    if (this.snake.checkCollisionCheese(this.cheese)) {
+    if (this.snake.checkCollision(this.cheese)) {
       this.replaceCheese();
     } else this.snake.shrink();
 
@@ -48,6 +46,7 @@ class Game {
   }
 
   replaceCheese() {
+    // TODO: unused space
     this.cheese = new Node(
       Math.floor(Math.random() * BOARD_SIZE),
       Math.floor(Math.random() * BOARD_SIZE)

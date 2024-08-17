@@ -15,16 +15,10 @@ class Snake {
 
   checkCollisionDeath() {
     const [headNode, ...restNodes] = this.tail;
-    return (
-      restNodes.some((n) => headNode.equals(n)) ||
-      headNode.x === BOARD_SIZE ||
-      headNode.y === BOARD_SIZE ||
-      headNode.x === -1 ||
-      headNode.y === -1
-    );
+    return restNodes.some((n) => headNode.equals(n)) || headNode.isOOB();
   }
 
-  checkCollisionCheese(node) {
+  checkCollision(node) {
     return this.tail.some((n) => node.equals(n));
   }
 
@@ -42,5 +36,15 @@ class Node {
   equals(node) {
     return this.x === node.x && this.y === node.y;
   }
+
+  isOOB() {
+    return (
+      this.x === BOARD_SIZE ||
+      this.y === BOARD_SIZE ||
+      this.x === -1 ||
+      this.y === -1
+    );
+  }
 }
+
 module.exports = { Node, Snake };
