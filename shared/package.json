@@ -1,0 +1,7 @@
+{
+  "name": "snakenn-shared",
+  "version": "1.0.0",
+  "description": "shared code between node and web",
+  "main": "index.js",
+  "license": "MIT"
+}

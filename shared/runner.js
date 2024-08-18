@@ -1,10 +1,24 @@
-const { BOARD_SIZE } = require("./config");
+const { BOARD_SIZE, TICK_RATE } = require("./config");
 const { Game } = require("./Game");
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+const repeat = true;
+
+class Runner {
+  constructor(input, publishFunction) {
+    this.input = input;
+    this.publishFunction = publishFunction;
+    this.reset();
+  }
+
+  reset() {
+    this.currentGame = new Game();
+  }
+}
+
 async function runner(input, publishFunction) {
-  while (true) {
+  do {
     const game = new Game();
     input.game = game;
 
@@ -12,7 +26,7 @@ async function runner(input, publishFunction) {
     let currentLength = 1;
 
     publishFunction(game.getState());
-    await sleep(100);
+    await sleep(TICK_RATE);
     while (game.tick(input.getMove())) {
       expireGameIn--;
       publishFunction(game.getState());
@@ -25,14 +39,14 @@ async function runner(input, publishFunction) {
         break;
       }
 
-      await sleep(100);
+      await sleep(TICK_RATE);
     }
 
     if (input.fitReplay) {
       await input.fitReplay();
     }
-    await sleep(1000);
-  }
+    // await sleep(1000);
+  } while (repeat);
 }
 
 module.exports = {

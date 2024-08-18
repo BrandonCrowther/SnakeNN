@@ -2,9 +2,9 @@ import React from "react";
 import Spinner from "react-bootstrap/Spinner";
 import "./GameBoard.css";
 import * as tf from "@tensorflow/tfjs";
-import { NeuralPreloadedInterface } from "./game/NeuralPreloadedInterface";
-import { NeuralTrainingInterface } from "./game/NeuralTrainingInterface";
-import { Game } from "./game/Game";
+import { NeuralPreloadedInterface } from "../../legacy/game/NeuralPreloadedInterface";
+import { V1NeuralInterface } from "../../legacy/game/V1NeuralInterface";
+import { Game } from "../../legacy/game/Game";
 
 class GameBoard extends React.Component {
   constructor(props) {
@@ -53,7 +53,7 @@ class GameBoard extends React.Component {
   async train() {
     var topScore = 0;
     var run = 1;
-    const trainingInterface = new NeuralTrainingInterface();
+    const trainingInterface = new V1NeuralInterface();
     while (this.state.trainingMode) {
       run++;
       var game = new Game(trainingInterface);

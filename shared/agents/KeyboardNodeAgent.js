@@ -1,4 +1,4 @@
-class KeyboardInterfaceNode {
+class KeyboardNodeAgent {
   constructor() {
     this.lastPress = [0, 1];
     this.setupInputListener();
@@ -41,4 +41,4 @@ class KeyboardInterfaceNode {
   }
 }
 
-module.exports = { KeyboardInterfaceNode };
+module.exports = { KeyboardNodeAgent };

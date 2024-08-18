@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Game } from "./shared/Game";
 import { Spinner } from "react-bootstrap";
 import * as tf from "@tensorflow/tfjs";
-import { NeuralTrainingInterface } from "./node/NeuralTrainingInterface";
-import { runner } from "./shared/runner";
-import { KeyboardInterfaceJs } from "./shared/KeyboardInterfaceJS";
+import { Game } from "snakenn-shared/Game";
+import { runner } from "snakenn-shared/runner";
+import { V1AlgorithmAgent } from "snakenn-shared/agents/V1AlgorithmAgent";
+import { ENTITY_CODES } from "snakenn-shared/config";
+import { KeyboardWebAgent } from "snakenn-shared/agents/KeyboardWebAgent";
+import { V1NeuralAgent } from "snakenn-shared/agents/V1NeuralAgent";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const EMPTY = "-";
-const HEAD = "H";
-const TAIL = "S";
-const CHEESE = "C";
+const { EMPTY, HEAD, TAIL, CHEESE } = ENTITY_CODES;
 
 const colorMap = {
   [EMPTY]: "gray",
@@ -29,9 +28,8 @@ export default function GameBoardV2(props) {
   useEffect(() => {
     (async () => {
       await tf.ready();
-      const tfModel = await tf.loadLayersModel("model/model.json");
-      const inter = new KeyboardInterfaceJs();
-      // setModelInterface(new NeuralTrainingInterface(tfModel));
+      // const tfModel = await tf.loadLayersModel("model/model.json");
+      const inter = new V1NeuralAgent(null, tf);
 
       runner(inter, setGameBoard);
       setIsLoaded(true);

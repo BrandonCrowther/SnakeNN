@@ -1,4 +1,4 @@
-class KeyboardInterfaceJs {
+class KeyboardWebAgent {
   constructor() {
     this.lastPress = [0, 1];
     document.addEventListener("keyup", (e) => {
@@ -29,4 +29,4 @@ class KeyboardInterfaceJs {
   }
 }
 
-module.exports = { KeyboardInterfaceJs };
+module.exports = { KeyboardWebAgent };
