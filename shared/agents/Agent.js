@@ -5,8 +5,8 @@ const {
 const { Node } = require("../Objects");
 
 class Agent {
-  constructor(game) {
-    this.game = game;
+  constructor() {
+    this.game = "add later";
   }
 
   getMoveData() {

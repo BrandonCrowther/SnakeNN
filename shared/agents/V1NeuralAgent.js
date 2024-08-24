@@ -4,10 +4,15 @@ const {
 } = require("../config");
 
 class V1NeuralAgent extends Agent {
-  constructor(game, tf) {
-    super(game);
+  constructor(tf, model = null) {
+    super();
     this.tf = tf;
-    this.newModel();
+    this.trainingEnabled = model === null;
+    if (model === null) {
+      this.newModel();
+    } else {
+      this.model = model;
+    }
     this.currentIteration = 1;
     this.inputs = [];
     this.scores = [];
@@ -66,8 +71,10 @@ class V1NeuralAgent extends Agent {
 
     this.inputs.push(params);
     this.scores.push(suggestedOutput);
+    console.log(params);
 
     const move = this.formatMove(predict);
+    console.log(move);
     return move;
   }
 
@@ -100,6 +107,9 @@ class V1NeuralAgent extends Agent {
   }
 
   async fitReplay() {
+    if (!this.trainingEnabled) {
+      return;
+    }
     const [inputsAsTensor, scoreAsTensor] = this.tf.tidy((_) => [
       this.tf.tensor2d(this.inputs, [
         this.inputs.length,

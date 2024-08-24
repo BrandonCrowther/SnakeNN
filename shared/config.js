@@ -1,6 +1,6 @@
 module.exports = {
   BOARD_SIZE: 10,
-  TICK_RATE: 1,
+  TICK_RATE: 50,
   IS_NODE: typeof window === "undefined",
   ENTITY_CODES: {
     EMPTY: "-",

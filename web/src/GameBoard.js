@@ -1,130 +1,69 @@
-import React from "react";
-import Spinner from "react-bootstrap/Spinner";
-import "./GameBoard.css";
+import React, { useEffect, useState } from "react";
+import { Spinner } from "react-bootstrap";
 import * as tf from "@tensorflow/tfjs";
-import { NeuralPreloadedInterface } from "../../legacy/game/NeuralPreloadedInterface";
-import { V1NeuralInterface } from "../../legacy/game/V1NeuralInterface";
-import { Game } from "../../legacy/game/Game";
+import { Game } from "snakenn-shared/Game";
+import { runner } from "snakenn-shared/runner";
+import { V1AlgorithmAgent } from "snakenn-shared/agents/V1AlgorithmAgent";
+import { ENTITY_CODES } from "snakenn-shared/config";
+import { KeyboardWebAgent } from "snakenn-shared/agents/KeyboardWebAgent";
+import { V1NeuralAgent } from "snakenn-shared/agents/V1NeuralAgent";
 
-class GameBoard extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isLoaded: false,
-      board: [[]],
-      speed: 25,
-      trainingMode: false,
-    };
-  }
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const { EMPTY, HEAD, TAIL, CHEESE } = ENTITY_CODES;
 
-  async componentDidMount() {
-    await tf.ready();
+const colorMap = {
+  [EMPTY]: "gray",
+  [HEAD]: "red",
+  [TAIL]: "black",
+  [CHEESE]: "yellow",
+};
 
-    const tfModel = await tf.loadLayersModel("model/model.json");
-    const modelInterface = new NeuralPreloadedInterface(tfModel);
+export default function GameBoardV2(props) {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [gameBoard, setGameBoard] = useState(null);
+  const [gameSpeed, setGameSpeed] = useState(1);
 
-    this.setState(
-      {
-        isLoaded: true,
-        modelInterface: modelInterface,
-      },
-      this.gameLoop
-    );
-  }
+  useEffect(() => {
+    (async () => {
+      await tf.ready();
+      const tfModel = await tf.loadLayersModel("v1_neural_model/model.json");
+      const agent = new V1NeuralAgent(tf, tfModel);
 
-  async gameLoop() {
-    while (!this.state.trainingMode) {
-      let game = new Game(this.state.modelInterface);
+      runner(agent, setGameBoard);
+      setIsLoaded(true);
+    })();
+  }, []);
 
-      let done = false;
-      while (!done) {
-        done = game.tick();
-        this.setState({ board: game.board });
-        await this.sleep(this.state.speed);
-      }
-
-      await this.sleep(1000);
-    }
-    this.train();
-  }
-
-  async train() {
-    var topScore = 0;
-    var run = 1;
-    const trainingInterface = new V1NeuralInterface();
-    while (this.state.trainingMode) {
-      run++;
-      var game = new Game(trainingInterface);
-      var done = false;
-      while (!done) {
-        done = game.tick();
-        await this.sleep(this.state.speed);
-        this.setState({ board: game.board, run: run });
-      }
-
-      await trainingInterface.fitReplay();
-
-      if (game.score > topScore) {
-        topScore = game.score;
-        // await trainingInterface.save('downloads://" + ' + topScore)
-        this.setState({ topScore: topScore });
-      }
-    }
-    this.gameLoop();
-  }
-
-  increaseSpeed = (_) => {
-    this.setState({ speed: Math.max(this.state.speed - 5, 0) });
-  };
-
-  decreaseSpeed = (_) => {
-    this.setState({ speed: this.state.speed + 5 });
-  };
-
-  toggleMode = (_) => {
-    this.setState({ trainingMode: !this.state.trainingMode });
-  };
-
-  render() {
-    const { trainingMode, isLoaded, board, run } = this.state;
-
-    const fatSpinnerStyle = { width: 4 + "rem", height: 4 + "rem" };
-
-    const colorMap = {
-      0: "gray",
-      1: "red",
-      2: "black",
-      3: "yellow",
-    };
-
-    if (!isLoaded) {
-      return (
-        <Spinner animation="border" role="status" style={fatSpinnerStyle}>
-          <span className="sr-only">Loading...</span>
-        </Spinner>
-      );
-    }
+  if (!isLoaded) {
     return (
-      <div>
-        <div>
-          <button onClick={this.toggleMode}>Toggle Mode</button>{" "}
-          {trainingMode ? "Training Mode" : "Pre-trained Mode"}
-        </div>
-        <div>{/* Run: {run} */}</div>
-        <div>
-          <button onClick={this.decreaseSpeed}>-</button>
-          Game Speed
-          <button onClick={this.increaseSpeed}>+</button>
-        </div>
-        <div className="board">
-          {board.map((e) => {
-            return e.map((f) => <div className={"block " + colorMap[f]}></div>);
-          })}
-        </div>
-      </div>
+      <Spinner
+        animation="border"
+        role="status"
+        style={{ width: 4 + "rem", height: 4 + "rem" }}
+      />
     );
   }
+
+  return (
+    <div>
+      <div>
+        {/* <button onClick={this.toggleMode}>Toggle Mode</button>{" "} */}
+        {/* {trainingMode ? "Training Mode" : "Pre-trained Mode"} */}
+      </div>
+      <div>{/* Run: {run} */}</div>
+      <div>
+        <button onClick={() => setGameSpeed(gameSpeed - 5)}>-</button>
+        Game Speed
+        <button onClick={() => setGameSpeed(gameSpeed + 5)}>+</button>
+      </div>
+      <div className="board">
+        {gameBoard.map((e) => {
+          return e.map((f) => {
+            return <div className={"block " + colorMap[f]}></div>;
+          });
+        })}
+      </div>
+    </div>
+  );
 }
-export default GameBoard;
