@@ -47,16 +47,6 @@ export default function GameBoardV2(props) {
 
   return (
     <div>
-      <div>
-        {/* <button onClick={this.toggleMode}>Toggle Mode</button>{" "} */}
-        {/* {trainingMode ? "Training Mode" : "Pre-trained Mode"} */}
-      </div>
-      <div>{/* Run: {run} */}</div>
-      <div>
-        <button onClick={() => setGameSpeed(gameSpeed - 5)}>-</button>
-        Game Speed
-        <button onClick={() => setGameSpeed(gameSpeed + 5)}>+</button>
-      </div>
       <div className="board">
         {gameBoard.map((e) => {
           return e.map((f) => {

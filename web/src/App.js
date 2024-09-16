@@ -7,17 +7,14 @@ function App() {
   return (
     <div className="App">
       <h1>Snake Neural Network</h1>
-      <p>
-        <span>By Brandon Crowther</span>
-        <strong>&nbsp;&nbsp;|&nbsp;&nbsp;</strong>
+      <div>
         <a href="https://github.com/BrandonCrowther/SnakeNN">Github</a>
-        <strong>&nbsp;&nbsp;|&nbsp;&nbsp;</strong>
+        &nbsp;|&nbsp;
         <a href="mailto:bcrowthe11@gmail.com">bcrowthe11@gmail.com</a>
-      </p>
-      <div className="game">
-        <div>
-          <GameBoard></GameBoard>
-        </div>
+      </div>
+
+      <div className="game pt-4">
+        <GameBoard />
       </div>
     </div>
   );
